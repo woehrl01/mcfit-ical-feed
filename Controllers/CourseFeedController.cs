@@ -69,6 +69,7 @@ namespace mcfit_ical.Controllers
                 });
 
             var calendar = new Calendar();
+            calendar.Name = $"McFit {clubId}";
             calendar.AddTimeZone(new VTimeZone(timezone));
             calendar.Events.AddRange(events);
             var iCalSerializer = new CalendarSerializer();
