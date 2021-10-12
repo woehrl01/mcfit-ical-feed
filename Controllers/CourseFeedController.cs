@@ -44,6 +44,7 @@ namespace mcfit_ical.Controllers
                 });
 
             var calendar = new Calendar();
+            calendar.AddTimeZone(new VTimeZone("Europe/Berlin"));
             calendar.Events.AddRange(events);
             var iCalSerializer = new CalendarSerializer();
             string result = iCalSerializer.SerializeToString(calendar);
