@@ -32,11 +32,13 @@ namespace mcfit_ical.Controllers
             var builder = new StringBuilder();
 
             if(r.Streaming != "No"){
-                builder.Append("🎥  ");
+                //builder.Append("🎥 ");
+                builder.Append("(S) ");
             }
 
             if(r.Liveclass != "No"){
-                builder.Append("👨 ");
+                //builder.Append("👨 ");
+                builder.Append("(L) ");
             }
 
             builder.Append(r.Classtitle);
@@ -67,7 +69,7 @@ namespace mcfit_ical.Controllers
                 });
 
             var calendar = new Calendar();
-            calendar.AddProperty("X-WR-CALNAME", $"McFit {clubId}");
+            //calendar.AddProperty("X-WR-CALNAME", $"McFit {clubId}");
             calendar.AddTimeZone(new VTimeZone(timezone));
             calendar.Events.AddRange(events);
             var iCalSerializer = new CalendarSerializer();
