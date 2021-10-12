@@ -32,11 +32,11 @@ namespace mcfit_ical.Controllers
             var builder = new StringBuilder();
 
             if(r.Streaming != "No"){
-                builder.Append("(S)  ");
+                builder.Append("🎥  ");
             }
 
             if(r.Liveclass != "No"){
-                builder.Append("(L) ");
+                builder.Append("👨 ");
             }
 
             builder.Append(r.Classtitle);
@@ -51,8 +51,6 @@ namespace mcfit_ical.Controllers
             var courses = await LoadFromMcFit(clubId);
 
             string timezone = "Europe/Berlin";
-
-            _logger.LogInformation("hide: {0}", hideOld);
 
             var events = courses
                 .SelectMany(x => x)
@@ -69,13 +67,13 @@ namespace mcfit_ical.Controllers
                 });
 
             var calendar = new Calendar();
-            calendar.Name = $"McFit {clubId}";
+            calendar.AddProperty("X-WR-CALNAME", $"McFit {clubId}");
             calendar.AddTimeZone(new VTimeZone(timezone));
             calendar.Events.AddRange(events);
             var iCalSerializer = new CalendarSerializer();
             string result = iCalSerializer.SerializeToString(calendar);
 
-            return File(Encoding.ASCII.GetBytes(result), "calendar/text", "calendar.ics");
+            return File(Encoding.UTF8.GetBytes(result), "calendar/text", "calendar.ics");
         }
         
         private async Task<McFitCourseResponse[][]> LoadFromMcFit(string id)
