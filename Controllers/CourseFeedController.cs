@@ -28,10 +28,10 @@ namespace mcfit_ical.Controllers
             _client = client;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("/coursefeed/{clubId}.ical")]
+        public async Task<IActionResult> Get(string clubId)
         {
-            var courses = await LoadFromMcFit("8313");
+            var courses = await LoadFromMcFit(clubId);
 
             var events = courses.SelectMany(x => x)
                 .Select(c => new CalendarEvent
