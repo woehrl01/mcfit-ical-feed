@@ -52,6 +52,7 @@ namespace mcfit_ical.Controllers
             string timezone = "Europe/Berlin";
 
             var events = courses.SelectMany(x => x)
+                .Where(c => !c.Classtitle.StartsWith("(old)"))
                 .Select(c => new CalendarEvent
                 {
                     Summary = BuildTitle(c),
