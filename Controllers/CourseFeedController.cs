@@ -32,11 +32,11 @@ namespace mcfit_ical.Controllers
             var builder = new StringBuilder();
 
             if(r.Streaming != "No"){
-                builder.Append("🎥 ");
+                builder.Append("(S)  ");
             }
 
             if(r.Liveclass != "No"){
-                builder.Append("👨 ");
+                builder.Append("(L) ");
             }
 
             builder.Append(r.Classtitle);
@@ -75,7 +75,7 @@ namespace mcfit_ical.Controllers
             var iCalSerializer = new CalendarSerializer();
             string result = iCalSerializer.SerializeToString(calendar);
 
-            return File(Encoding.UTF8.GetBytes(result), "calendar/text", "calendar.ics");
+            return File(Encoding.ASCII.GetBytes(result), "calendar/text", "calendar.ics");
         }
         
         private async Task<McFitCourseResponse[][]> LoadFromMcFit(string id)
