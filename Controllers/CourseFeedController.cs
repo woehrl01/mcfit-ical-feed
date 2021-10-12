@@ -56,7 +56,7 @@ namespace mcfit_ical.Controllers
 
             var events = courses
                 .SelectMany(x => x)
-                .Where(c => (hideOld == 1 && !c.Classtitle.StartsWith("(old)")) || true)
+                .Where(c => (hideOld == 1 && (c.Streaming != "No" || c.Liveclass != "No")) || true)
                 .Where(c => (stream == 1 && c.Streaming != "No") || true)
                 .Where(c => (live == 1 && c.Liveclass != "No") || true)
                 .Select(c => new CalendarEvent
