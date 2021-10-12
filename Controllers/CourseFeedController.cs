@@ -28,6 +28,22 @@ namespace mcfit_ical.Controllers
             _client = client;
         }
 
+        private static string BuildTitle(McFitCourseResponse r){
+            var builder = new StringBuilder();
+
+            if(r.Streaming != "No"){
+                builder.Append("🎥 ");
+            }
+
+            if(r.Liveclass != "No"){
+                builder.Append("👨‍🏫 ");
+            }
+
+            builder.Append(r.Classtitle);
+            
+            return builder.ToString();
+        }
+
         [HttpGet("/coursefeed/{clubId}.ical")]
         public async Task<IActionResult> Get(string clubId)
         {
@@ -38,7 +54,7 @@ namespace mcfit_ical.Controllers
             var events = courses.SelectMany(x => x)
                 .Select(c => new CalendarEvent
                 {
-                    Summary = c.Classtitle,
+                    Summary = BuildTitle(c),
                     Uid = c.Id,
                     Description = c.Description,
                     Start = new CalDateTime(c.Startdate, timezone),
