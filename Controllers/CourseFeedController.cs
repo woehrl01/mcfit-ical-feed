@@ -45,14 +45,20 @@ namespace mcfit_ical.Controllers
         }
 
         [HttpGet("/coursefeed/{clubId}.ical")]
-        public async Task<IActionResult> Get(string clubId)
+        public async Task<IActionResult> Get([FromRoute]string clubId, [FromQuery]int stream, [FromQuery]int live, [FromQuery]int hideOld)
         {
+
+            var q = HttpContext.Request.Query;
+
             var courses = await LoadFromMcFit(clubId);
 
             string timezone = "Europe/Berlin";
 
-            var events = courses.SelectMany(x => x)
-                .Where(c => !c.Classtitle.StartsWith("(old)"))
+            var events = courses
+                .SelectMany(x => x)
+                .Where(c => (hideOld == 1 && !c.Classtitle.StartsWith("(old)")) || true)
+                .Where(c => (stream == 1 && c.Streaming != "No") || true)
+                .Where(c => (live == 1 && c.Liveclass != "No") || true)
                 .Select(c => new CalendarEvent
                 {
                     Summary = BuildTitle(c),
