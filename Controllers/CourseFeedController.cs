@@ -33,18 +33,20 @@ namespace mcfit_ical.Controllers
         {
             var courses = await LoadFromMcFit(clubId);
 
+            string timezone = "Europe/Berlin";
+
             var events = courses.SelectMany(x => x)
                 .Select(c => new CalendarEvent
                 {
                     Summary = c.Classtitle,
                     Uid = c.Id,
                     Description = c.Description,
-                    Start = new CalDateTime(c.Startdate),
-                    End = new CalDateTime(c.Enddate)
+                    Start = new CalDateTime(c.Startdate, timezone),
+                    End = new CalDateTime(c.Enddate, timezone)
                 });
 
             var calendar = new Calendar();
-            calendar.AddTimeZone(new VTimeZone("Europe/Berlin"));
+            calendar.AddTimeZone(new VTimeZone(timezone));
             calendar.Events.AddRange(events);
             var iCalSerializer = new CalendarSerializer();
             string result = iCalSerializer.SerializeToString(calendar);
