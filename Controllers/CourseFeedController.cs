@@ -32,11 +32,11 @@ namespace mcfit_ical.Controllers
             var builder = new StringBuilder();
 
             if(r.Streaming != "No"){
-                builder.Append("🎥 ");
+                builder.Append("(S) ");
             }
 
             if(r.Liveclass != "No"){
-                builder.Append("👨‍🏫 ");
+                builder.Append("(L) ");
             }
 
             builder.Append(r.Classtitle);
