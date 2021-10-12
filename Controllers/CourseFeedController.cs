@@ -32,11 +32,11 @@ namespace mcfit_ical.Controllers
             var builder = new StringBuilder();
 
             if(r.Streaming != "No"){
-                builder.Append("(S) ");
+                builder.Append("🎥 ");
             }
 
             if(r.Liveclass != "No"){
-                builder.Append("(L) ");
+                builder.Append("👨 ");
             }
 
             builder.Append(r.Classtitle);
@@ -48,17 +48,17 @@ namespace mcfit_ical.Controllers
         public async Task<IActionResult> Get([FromRoute]string clubId, [FromQuery]int stream, [FromQuery]int live, [FromQuery]int hideOld)
         {
 
-            var q = HttpContext.Request.Query;
-
             var courses = await LoadFromMcFit(clubId);
 
             string timezone = "Europe/Berlin";
 
+            _logger.LogInformation("hide: {0}", hideOld);
+
             var events = courses
                 .SelectMany(x => x)
-                .Where(c => (hideOld == 1 && (c.Streaming != "No" || c.Liveclass != "No")) || true)
-                .Where(c => (stream == 1 && c.Streaming != "No") || true)
-                .Where(c => (live == 1 && c.Liveclass != "No") || true)
+                .Where(c => (hideOld == 1 && (c.Streaming != "No" || c.Liveclass != "No")) || hideOld != 1)
+                .Where(c => (stream == 1 && c.Streaming != "No") || stream != 1)
+                .Where(c => (live == 1 && c.Liveclass != "No") || live != 1)
                 .Select(c => new CalendarEvent
                 {
                     Summary = BuildTitle(c),
@@ -75,7 +75,7 @@ namespace mcfit_ical.Controllers
             var iCalSerializer = new CalendarSerializer();
             string result = iCalSerializer.SerializeToString(calendar);
 
-            return File(Encoding.ASCII.GetBytes(result), "calendar/text", "calendar.ics");
+            return File(Encoding.UTF8.GetBytes(result), "calendar/text", "calendar.ics");
         }
         
         private async Task<McFitCourseResponse[][]> LoadFromMcFit(string id)
