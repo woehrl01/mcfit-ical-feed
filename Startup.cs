@@ -28,7 +28,9 @@ namespace McFitCourseFeed
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            } else {
+            }
+            else
+            {
                 app.UseHttpsRedirection();
             }
 
