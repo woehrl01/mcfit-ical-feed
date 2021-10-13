@@ -47,6 +47,11 @@ namespace McFitCourseFeed.Controllers
             return builder.ToString();
         }
 
+        [HttpGet("/")]
+        public string Hello(){
+            return "hello";
+        }
+
         [HttpGet("/coursefeed/{clubId}.ical")]
         public async Task<IActionResult> Get([FromRoute] string clubId, [FromQuery] int stream, [FromQuery] int live, [FromQuery] int hideOld)
         {
