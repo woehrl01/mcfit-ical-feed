@@ -22,3 +22,4 @@ RUN rm -rf /tmp/library-scripts
 
 RUN dotnet tool install --global dotnet-format --version 5.* 
 RUN curl https://cli-assets.heroku.com/install.sh | sh
+RUN dotnet dev-certs https
