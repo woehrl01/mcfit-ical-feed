@@ -28,7 +28,13 @@ namespace McFitCourseFeed.Api
              * Therfore we always send the beginning of this week as the StartDate
              * The EndDate is 30 Days in the future based on the StartDate
              */
-            var from = DateTime.Today.StartOfWeek(DayOfWeek.Monday);
+
+            var now = DateTime.UtcNow;
+
+            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Berlin");
+            var germanTime = TimeZoneInfo.ConvertTimeFromUtc(now, cstZone);
+
+            var from = germanTime.StartOfWeek(DayOfWeek.Monday);
             var to = from.AddDays(30);
 
             var request = new McFitCourseRequest
