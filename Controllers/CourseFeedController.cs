@@ -55,10 +55,9 @@ namespace McFitCourseFeed.Controllers
         [HttpGet("/coursefeed/{clubId}.ical")]
         public async Task<IActionResult> Get([FromRoute] string clubId, [FromQuery] int stream, [FromQuery] int live, [FromQuery] int hideOld)
         {
-            var from = DateTime.Today;
-            var to = from.AddMonths(1);
+            
 
-            var courses = await api.LoadFromMcFit(clubId, from, to);
+            var courses = await api.LoadFromMcFit(clubId);
 
             var events = courses
                 .SelectMany(x => x)

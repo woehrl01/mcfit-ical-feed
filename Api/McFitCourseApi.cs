@@ -8,7 +8,7 @@ namespace McFitCourseFeed.Api
 {
     public interface IMcFitCourseApi
     {
-        Task<McFitCourseResponse[][]> LoadFromMcFit(string id, DateTime from, DateTime to);
+        Task<McFitCourseResponse[][]> LoadFromMcFit(string id);
     }
 
     public class McFitCourseApi : IMcFitCourseApi
@@ -20,19 +20,29 @@ namespace McFitCourseFeed.Api
             _client = client;
         }
 
-        public async Task<McFitCourseResponse[][]> LoadFromMcFit(string id, DateTime from, DateTime to)
+        public async Task<McFitCourseResponse[][]> LoadFromMcFit(string id)
         {
+            /* 
+             * it looks like that the API requires some special 
+             * treatment for StartDate and EndDate.
+             * Therfore we always send the beginning of this week as the StartDate
+             * The EndDate is one month in the future based on the StartDate
+             */
+            var from = DateTime.Today.StartOfWeek(DayOfWeek.Monday);
+            var to = from.AddMonths(1).AddDays(-1);
+
             var request = new McFitCourseRequest
             {
                 StudioId = id,
                 StartDate = from.ToString("yyyy-MM-dd"),
                 EndDate = to.ToString("yyyy-MM-dd")
             };
-            var postBody = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+            var requestStr = JsonSerializer.Serialize(request);
+            var postBody = new StringContent(requestStr, Encoding.UTF8, "application/json");
             using (var responseBody = await _client.PostAsync("https://coursplan-proxy.herokuapp.com/api/classes", postBody))
-            using (var stream = await responseBody.Content.ReadAsStreamAsync())
             {
-                return await JsonSerializer.DeserializeAsync<McFitCourseResponse[][]>(stream);
+                var result = await responseBody.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<McFitCourseResponse[][]>(result);
             }
         }
     }
