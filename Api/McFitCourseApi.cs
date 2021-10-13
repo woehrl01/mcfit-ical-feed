@@ -26,10 +26,10 @@ namespace McFitCourseFeed.Api
              * it looks like that the API requires some special 
              * treatment for StartDate and EndDate.
              * Therfore we always send the beginning of this week as the StartDate
-             * The EndDate is one month in the future based on the StartDate
+             * The EndDate is 30 Days in the future based on the StartDate
              */
             var from = DateTime.Today.StartOfWeek(DayOfWeek.Monday);
-            var to = from.AddMonths(1).AddDays(-1);
+            var to = from.AddDays(30);
 
             var request = new McFitCourseRequest
             {
