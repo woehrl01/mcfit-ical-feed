@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>mcfit_ical</RootNamespace>
+    <RootNamespace>McFitCourseFeed</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

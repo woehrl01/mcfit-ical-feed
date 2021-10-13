@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "mcfit_ical": {
+    "McFitCourseFeed": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

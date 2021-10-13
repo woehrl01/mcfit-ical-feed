@@ -1,58 +1,59 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Net.Http;
-using System.Text.Json;
 using System.Text;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
-using System.Text.Json.Serialization;
+using McFitCourseFeed.Api;
 
-namespace mcfit_ical.Controllers
+namespace McFitCourseFeed.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class CourseFeedController : ControllerBase
     {
-        private readonly ILogger<CourseFeedController> _logger;
-        private readonly HttpClient _client;
+        private const string Timezone = "Europe/Berlin";
+        private readonly ILogger<CourseFeedController> logger;
+        private readonly IMcFitCourseApi api;
 
-        public CourseFeedController(ILogger<CourseFeedController> logger, HttpClient client)
+        public CourseFeedController(ILogger<CourseFeedController> logger, IMcFitCourseApi api)
         {
-            _logger = logger;
-            _client = client;
+            this.logger = logger;
+            this.api = api;
         }
 
-        private static string BuildTitle(McFitCourseResponse r){
+        private static string BuildTitle(McFitCourseResponse r)
+        {
             var builder = new StringBuilder();
 
-            if(r.Streaming != "No"){
+            if (r.Streaming != "No")
+            {
                 //builder.Append("🎥 ");
                 builder.Append("(S) ");
             }
 
-            if(r.Liveclass != "No"){
+            if (r.Liveclass != "No")
+            {
                 //builder.Append("👨 ");
                 builder.Append("(L) ");
             }
 
             builder.Append(r.Classtitle);
-            
+
             return builder.ToString();
         }
 
         [HttpGet("/coursefeed/{clubId}.ical")]
-        public async Task<IActionResult> Get([FromRoute]string clubId, [FromQuery]int stream, [FromQuery]int live, [FromQuery]int hideOld)
+        public async Task<IActionResult> Get([FromRoute] string clubId, [FromQuery] int stream, [FromQuery] int live, [FromQuery] int hideOld)
         {
+            var from = DateTime.Today;
+            var to = from.AddMonths(1);
 
-            var courses = await LoadFromMcFit(clubId);
-
-            string timezone = "Europe/Berlin";
+            var courses = await api.LoadFromMcFit(clubId, from, to);
 
             var events = courses
                 .SelectMany(x => x)
@@ -64,48 +65,19 @@ namespace mcfit_ical.Controllers
                     Summary = BuildTitle(c),
                     Uid = c.Id,
                     Description = c.Description,
-                    Start = new CalDateTime(c.Startdate, timezone),
-                    End = new CalDateTime(c.Enddate, timezone)
+                    Start = new CalDateTime(c.Startdate, Timezone),
+                    End = new CalDateTime(c.Enddate, Timezone)
                 });
 
             var calendar = new Calendar();
-            //calendar.AddProperty("X-WR-CALNAME", $"McFit {clubId}");
-            calendar.AddTimeZone(new VTimeZone(timezone));
+            calendar.AddTimeZone(new VTimeZone(Timezone));
             calendar.Events.AddRange(events);
             var iCalSerializer = new CalendarSerializer();
             string result = iCalSerializer.SerializeToString(calendar);
 
-            return File(Encoding.UTF8.GetBytes(result), "calendar/text", "calendar.ics");
+            return File(Encoding.UTF8.GetBytes(result), "text/calendar", "calendar.ics");
         }
-        
-        private async Task<McFitCourseResponse[][]> LoadFromMcFit(string id)
-        {
-            var today = DateTime.Today;
-            var future = today.AddMonths(1);
 
-            var request = new Request{
-                StudioId = id,
-                StartDate = today.ToString("yyyy-MM-dd"),
-                EndDate = future.ToString("yyyy-MM-dd")
-            };
-            var postBody = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-            using(var responseBody = await _client.PostAsync("https://coursplan-proxy.herokuapp.com/api/classes", postBody))
-            using(var stream = await responseBody.Content.ReadAsStreamAsync())
-            {
-                return await JsonSerializer.DeserializeAsync<McFitCourseResponse[][]>(stream);
-            }
-        }   
     }
-
-    public class Request{
-        [JsonPropertyName("studioId")]
-        public string StudioId {get; set;}
-
-        [JsonPropertyName("startDate")]
-        public string StartDate {get; set;}
-
-        [JsonPropertyName("endDate")]
-        public string EndDate {get; set;}
-    };
 
 }

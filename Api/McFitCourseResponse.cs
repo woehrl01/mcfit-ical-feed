@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace mcfit_ical
+namespace McFitCourseFeed
 {
     public class McFitCourseResponse
     {

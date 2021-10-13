@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace mcfit_ical
+namespace McFitCourseFeed
 {
     public class Program
     {
