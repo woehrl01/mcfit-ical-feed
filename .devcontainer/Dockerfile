@@ -20,4 +20,5 @@ RUN bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "$
 # Remove library scripts for final image
 RUN rm -rf /tmp/library-scripts
 
-RUN dotnet tool install --global dotnet-format --version 5.*
+RUN dotnet tool install --global dotnet-format --version 5.* 
+RUN curl https://cli-assets.heroku.com/install.sh | sh
