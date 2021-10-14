@@ -53,11 +53,10 @@ namespace McFitCourseFeed.Controllers
             return "looks good!";
         }
 
+        [HttpGet("/courses/{clubId}.ical")]
         [HttpGet("/coursefeed/{clubId}.ical")]
         public async Task<IActionResult> Get([FromRoute] string clubId, [FromQuery] int stream, [FromQuery] int live, [FromQuery] int hideOld)
         {
-
-
             var courses = await api.LoadFromMcFit(clubId);
 
             var events = courses

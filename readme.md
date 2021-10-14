@@ -4,7 +4,7 @@ Hosted on Heroku
 
 Use the following URL and replace the necessary parts:
 
-https://mcfit-ical-feed.herokuapp.com/coursefeed/[clubId].ical
+https://mcfit-ical-feed.herokuapp.com/courses/[clubId].ical
 
 Possible Query Parameter:
 
