@@ -24,4 +24,3 @@ RUN dotnet tool install --global dotnet-format --version 5.*
 ENV PATH="$PATH:/home/vscode/.dotnet/tools"
 
 RUN curl https://cli-assets.heroku.com/install.sh | sh
-RUN dotnet dev-certs https

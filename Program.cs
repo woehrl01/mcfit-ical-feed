@@ -1,20 +1,19 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace McFitCourseFeed
+builder.Services.AddTransient<IMcFitCourseApi, McFitCourseApi>();
+builder.Services.AddControllers();
+builder.Services.AddHttpClient();
+
+var app = builder.Build();
+
+if (app.Environment.IsProduction())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    app.UseHttpsRedirection();
 }
+else
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.MapControllers();
+app.Run();
