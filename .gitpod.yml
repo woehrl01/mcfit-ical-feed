@@ -1,0 +1,7 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - name: Dev Start
+    init: dotnet dev-certs https && dotnet restore
+    command: dotnet run
