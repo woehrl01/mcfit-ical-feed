@@ -21,8 +21,8 @@ ENV \
     # PowerShell telemetry for docker image usage
     POWERSHELL_DISTRIBUTION_CHANNEL=PSDocker-DotnetSDK-Debian-11
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+RUN sudo apt-get update \
+    && sudo apt-get install -y --no-install-recommends \
         curl \
         git \
         wget
