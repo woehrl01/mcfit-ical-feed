@@ -4,7 +4,7 @@ USER gitpod
 
 # Install .NET SDK (Current channel)
 # Source: https://docs.microsoft.com/dotnet/core/install/linux-scripted-manual#scripted-install
-RUN mkdir -p /home/gitpod/dotnet && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0 --install-dir /usr/bin/dotnet
+RUN sudo mkdir -p /home/gitpod/dotnet && sudo curl -fsSL https://dot.net/v1/dotnet-install.sh | sudo bash /dev/stdin --channel 6.0 --install-dir /usr/bin/dotnet
 ENV DOTNET_ROOT=/usr/bin/dotnet
 ENV PATH=$PATH:/usr/bin/dotnet
 
