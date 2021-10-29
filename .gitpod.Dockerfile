@@ -8,3 +8,6 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | s
 
 ENV DOTNET_ROOT=/tmp/dotnet
 ENV PATH=$PATH:/tmp/dotnet
+
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
+ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1

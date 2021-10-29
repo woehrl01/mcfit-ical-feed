@@ -2,6 +2,9 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:    
-  - name: Dev Start
-    init: mkdir -p /tmp/dotnet && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0 --install-dir /tmp/dotnet && dotnet dev-certs https && dotnet restore
-    command: dotnet watch run
+  - name: Postinstall Dotnet and certificates
+    init: |
+      mkdir -p /tmp/dotnet && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0 --install-dir /tmp/dotnet 
+      dotnet dev-certs https 
+      dotnet restore
+    
