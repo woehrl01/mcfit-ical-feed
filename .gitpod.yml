@@ -1,10 +1,7 @@
 image:
   file: .gitpod.Dockerfile
 
-tasks:
-  - init: mkdir -p /tmp/dotnet && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0 --install-dir /tmp/dotnet
-          export DOTNET_ROOT=/tmp/dotnet
-          export PATH=$PATH:/tmp/dotnet
+tasks:    
   - name: Dev Start
-    init: dotnet dev-certs https && dotnet restore
-    command: dotnet run
+    init: mkdir -p /tmp/dotnet && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0 --install-dir /tmp/dotnet && dotnet dev-certs https && dotnet restore
+    command: dotnet watch run
