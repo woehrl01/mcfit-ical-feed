@@ -4,7 +4,7 @@ image:
 tasks:    
   - name: Postinstall Dotnet and certificates
     init: |
-      mkdir -p /tmp/dotnet && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0 --install-dir /tmp/dotnet 
+      mkdir -p $DOTNET_ROOT && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0 --install-dir $DOTNET_ROOT 
       dotnet dev-certs https 
       dotnet restore
 
