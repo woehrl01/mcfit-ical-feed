@@ -1,6 +1,12 @@
 image:
   file: .gitpod.Dockerfile
 
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
+
 tasks:    
   - name: Postinstall Dotnet and certificates
     init: |
